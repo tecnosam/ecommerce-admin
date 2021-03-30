@@ -68,7 +68,7 @@ class Products:
 
 	@staticmethod
 	def retrieve( fil = None ):
-		cols = ['id', 'title', 'price', 'image', 'category', 'delivered_in']
+		cols = ['id', 'title', 'price', 'image', 'category', 'delivered-in']
 		sql = f"SELECT {','.join(cols)} FROM products ORDER BY `date-posted` DESC"
 		db = con()
 
