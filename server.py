@@ -66,7 +66,8 @@ def purchases():
 		for item in data['basket']:
 			res = api.Purchases.log( ref, item['id'], uid, item['price'], item['quantity'] )
 			res['product'] = item['title']
-			logs.append( res )
+			if not res['status']:
+				logs.append( res )
 
 		return jsonify( { 'status': True, "logs": logs } )
 

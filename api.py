@@ -56,11 +56,11 @@ class Auth:
 class Products:
 
 	@staticmethod
-	def create( title, price, image, category, vid ):
+	def create( title, price, image, category, vid, delivered_in=3 ):
 		# Vid means vendor ID
-		sql = """INSERT INTO products ( title, price, image, category, vid ) 
-					VALUES ('%s', %s, '%s', '%s', '%s')""" % (
-				title, price, image, category, vid
+		sql = """INSERT INTO products ( title, price, image, category, vid, `delivered-in` ) 
+					VALUES ('%s', %s, '%s', '%s', '%s', %s)""" % (
+				title, price, image, category, vid, delivered_in
 			)
 		db = con()
 
@@ -68,7 +68,7 @@ class Products:
 
 	@staticmethod
 	def retrieve( fil = None ):
-		cols = ['id', 'title', 'price', 'image', 'category']
+		cols = ['id', 'title', 'price', 'image', 'category', 'delivered_in']
 		sql = f"SELECT {','.join(cols)} FROM products ORDER BY `date-posted` DESC"
 		db = con()
 
@@ -84,7 +84,7 @@ class Products:
 	@staticmethod
 	def update( _id, node, val ):
 
-		if node not in [ 'title', 'price', 'category' ]:
+		if node not in [ 'title', 'price', 'category', 'delivered-in' ]:
 			return {'status': False, 'code': 405}
 
 		sql = f"UPDATE products SET `{node}`='{val}' WHERE id={_id}"
