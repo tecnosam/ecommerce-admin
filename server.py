@@ -64,9 +64,9 @@ def purchases():
 		logs = []
 
 		for item in data['basket']:
+			item['quantity'] = 1 if 'quantity' not in item else item['quantity']
 			res = api.Purchases.log( ref, item['id'], uid, item['price'], item['quantity'] )
 			res['product'] = item['title']
-			item['quantity'] = 1 if 'quantity' not in item else item['quantity']
 			if not res['status']:
 				logs.append( res )
 
