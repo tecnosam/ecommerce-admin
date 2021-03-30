@@ -147,14 +147,21 @@ class Vendors:
 
 class Purchases:
 	@staticmethod
-	def log( ref, _id, user, price, quantity = 1 ):
+	def log( ref, _id, user, price,  quantity = 1, db= None ):
 		# Vid means vendor ID
-		sql = "INSERT INTO purchases (ref,_id,user,price,quantity) VALUES ('%s',%s,'%s',%s,%s)" % (
+		# _id means id of the product purchased
+		# ref is the transaction reference
+		# price is the purchase price at that moment
+		# quantity is the number of units purchased
+		sql = "INSERT INTO purchases (ref,id,user,price,quantity) VALUES ('%s',%s,'%s',%s,%s)" % (
 				ref, _id, user, price, quantity
 			)
-		db = con()
+		if db is None:
+			db = con()
 
-		return {'status': db.set( sql )}
+		return {
+			'status': db.set( sql )
+			}
 
 	@staticmethod
 	def calc_revenue( vid ):

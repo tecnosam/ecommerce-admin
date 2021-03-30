@@ -55,5 +55,23 @@ def signup():
 
 	return "Weird"
 
+@app.route( "/purchases", methods = ['POST'] )
+def purchases():
+	if request.method == 'POST':
+		data = dict( request.get_json() )
+		ref = data['ref']
+		uid = data['uid']
+		logs = []
+
+		for item in data['basket']:
+			res = api.Purchases.log( ref, item['id'], uid, item['price'], item['quantity'] )
+			res['product'] = item['title']
+			logs.append( res )
+
+		return jsonify( { 'status': True, "logs": logs } )
+
+	return "Whoopsy"
+
+
 if __name__ == '__main__':
 	app.run( debug = True, host = '0.0.0.0' )
