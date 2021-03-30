@@ -61,6 +61,7 @@ def purchases():
 		data = dict( request.get_json() )
 		ref = data['ref']
 		uid = data['uid']
+		item['quantity'] = 1 if 'quantity' not in item
 		logs = []
 
 		for item in data['basket']:
