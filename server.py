@@ -61,12 +61,12 @@ def purchases():
 		data = dict( request.get_json() )
 		ref = data['ref']
 		uid = data['uid']
-		item['quantity'] = 1 if 'quantity' not in item else item['quantity']
 		logs = []
 
 		for item in data['basket']:
 			res = api.Purchases.log( ref, item['id'], uid, item['price'], item['quantity'] )
 			res['product'] = item['title']
+			item['quantity'] = 1 if 'quantity' not in item else item['quantity']
 			if not res['status']:
 				logs.append( res )
 
