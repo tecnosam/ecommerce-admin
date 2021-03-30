@@ -68,7 +68,7 @@ class Products:
 
 	@staticmethod
 	def retrieve( fil = None ):
-		cols = ['id', 'title', 'price', 'image', 'category', 'delivered-in']
+		cols = ['id', 'title', 'price', 'image', 'category', '`delivered-in`']
 		sql = f"SELECT {','.join(cols)} FROM products ORDER BY `date-posted` DESC"
 		db = con()
 
@@ -77,7 +77,7 @@ class Products:
 
 		for row in res:
 
-			ret.append( { cols[i]: row[i] for i in range( len(cols) ) } )
+			ret.append( { cols[i].replace("`", ""): row[i] for i in range( len(cols) ) } )
 
 		return ret
 
@@ -86,6 +86,9 @@ class Products:
 
 		if node not in [ 'title', 'price', 'category', 'delivered-in' ]:
 			return {'status': False, 'code': 405}
+
+		if node == 'delivered-in':
+			node = '`delivered-in`'
 
 		sql = f"UPDATE products SET `{node}`='{val}' WHERE id={_id}"
 		db = con()
