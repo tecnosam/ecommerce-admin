@@ -111,6 +111,7 @@ class Vendors:
 		sql = "INSERT INTO vendors ( vid, name, whatsapp ) VALUES ('%s', '%s', '%s')" % (
 				vid, name, whatsapp
 			)
+
 		db = con()
 
 		return {'status': db.set( sql )}

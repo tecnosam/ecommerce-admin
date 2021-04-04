@@ -15,8 +15,55 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def products():
 	if request.method == 'GET':
 		return jsonify(api.Products.retrieve(  ))
+	elif request.method == 'POST':
+		try:
+			# title, price, image, category, vid, delivered_in=3
+			return jsonify(api.Products.create( **request.form ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+	elif request.method == 'PUT':
+		try:
+			# _id, node, val
+			return jsonify(api.Products.update( **request.form ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+	elif request.method == 'DELETE':
+		try:
+			# _id
+			return jsonify(api.Products.delete( request.args['_id'] ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+
 
 	return "The remaining methods are not yet available to the public"
+
+
+@app.route("/vendors", methods = ['POST', 'GET', 'PUT', 'DELETE'])
+@cross_origin()
+def vendors():
+	if request.method == 'GET':
+		return jsonify(api.Vendors.retrieve(  ))
+	elif request.method == 'POST':
+		try:
+			# vid, name, whatsapp
+			return jsonify(api.Vendors.create( **request.form ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+	elif request.method == 'PUT':
+		try:
+			# vid, node, val
+			return jsonify(api.Vendors.update( **request.form ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+	elif request.method == 'DELETE':
+		try:
+			# vid
+			return jsonify(api.Vendors.delete( request.args['vid'] ))
+		except TypeError as e:
+			return Response( { 'status': False, 'error': str(e) }, 400 )
+
+	return "The remaining methods are not yet available to the public"
+
 
 @app.route( "/login", methods = ['GET', 'POST', 'DELETE'] )
 @cross_origin()
