@@ -2,10 +2,9 @@ import pymysql as DBAdapter
 import sys, os
 
 class Connection:
-    def __init__(self, 
-        host = 'vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com', 
-        usr = 'n0r8dtq32n99jcwm', pwd = 'snapxx84ci4o4824', db = "ftakoaax9gh5voz8"):
-        self.db = DBAdapter.connect( host, usr, pwd, db )
+    def __init__(self, usr, pwd, host, port, database):
+        self.db = DBAdapter.connect( host = host, user = usr,
+                 password = pwd, database = database, port = int(port) )
         # self.db = DBAdapter.connect( "localhost", "root", "", "silcon" )
 
     def set( self, sql ):

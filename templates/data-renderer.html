@@ -1,0 +1,164 @@
+{%extends "base.html"%}
+
+{%block _title%}{{title}}{%endblock%}
+<!-- TODO: modals for edit and add new -->
+{%block content%}
+{%if props.deletable != False%}
+    <script>
+        function DeleteRow( key ){
+            var deletable = `{{props.deletable}}`
+            if (confirm( `Are you sure you want to delete row with ${deletable} ${key}` )) {
+                console.log("Deleting");
+                $.ajax({
+                    url: `/${title}?${key}`,
+                    method: 'DELETE',
+                    success: function( status ) {
+                        if ( status ) {
+                            alert(`Successfully deleted row with ${deletable} ${key}`);
+                            $(`#${key}`).remove();
+                        } else { alert("Could not delete row") }
+                    }
+                })
+            }
+        }
+    </script>
+{%endif%}
+<div class="row">
+    <div class="col-12 mt-4">
+
+        <h2 class="mb-0">{{title}}</h2>
+        {%if props.spawnable%}
+            <a href="javascript:void(0)"
+             data-toggle="modal" data-target="#spawn">click here to create a new record</a>
+
+            <div id="spawn" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <div class="text-center mt-2 mb-4">
+                                <h2 class="text-uppercase">fill {{title}} info</h2>
+                            </div>
+                            <form class="pl-3 pr-3"
+                             method="POST" action="{{ url_for(title) }}">
+
+                                {%for key in props.editable%}
+                                    <div class="form-group">
+                                        <label for="{{key}}">{{key}}</label>
+                                        <input class="form-control" placeholder="{{key}}..." 
+                                         type="text" name="{{key}}" required="">
+                                    </div>
+                                    <br>
+                                {%endfor%}
+
+                                <div class="form-group text-center">
+                                    <button class="btn btn-primary" type="submit">Create</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+        {%endif%}
+
+    </div>
+    <div>
+        {%for alert in get_flashed_messages(with_categories = True)%}
+            <div class="alert alert-secondary alert-dismissible bg-{{alert[0]}} text-white border-0 fade show" role="alert">
+                <button type = "button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+                        {{alert[1]}}
+            </div>
+        {%endfor%}
+    </div>
+
+</div>
+<div class="row">
+                    
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <!-- <th scope="col">#</th> -->
+                                {%for col in props.cols%}
+                                    <th scope="col">{{col}}</th>
+                                {%endfor%}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for row in data %}
+                                <tr 
+                                id="`{%if props.deletable != False%}{{props.deletable}}{%endif%}`">
+                                    {%for key in row%}
+                                        <td> {{row[key]}} </td>
+                                    {%endfor%}
+                                    {%if props.deletable != False%}
+                                        <td>
+                                            <a href="javascript:void(0)"
+                                             onclick="DeleteRow(`{{ row[props.deletable] }}`)">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    {%endif%}
+                                    {%if props.editable != None%}
+                                        <td>
+                                            <a href="javascript:void(0)"
+                                                data-toggle="modal" data-target="#edit-{{props.deletable}}">
+                                                Edit
+                                            </a>
+                                        </td>
+                                    {%endif%}
+                                </tr>
+                                <!-- since deletable is unique we use it to index. -->
+                                {%if props.deletable != False and props.editable != None%}
+                                    <div id="edit-{{props.deletable}}" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                                <div class="modal-body">
+                                                    <div class="text-center mt-2 mb-4">
+                                                        <h2 class="text-uppercase">FILL INFO</h2>
+                                                    </div>
+                                                    <form class="pl-3 pr-3"
+                                                     method="POST" action="/{{ title }}-edit">
+
+                                                        {%for key in props.editable%}
+                                                            <div class="form-group">
+                                                                <label for="{{key}}">{{key}}</label>
+                                                                <input class="form-control" type="text" name="{{key}}" required=""
+                                                                    value="{{row[key]}}">
+                                                            </div>
+                                                            <br>
+                                                        {%endfor%}
+                                                        <input type="text"
+                                                         name="{{props.deletable}}" value="{{row[props.deletable]}}" hidden="">
+
+                                                        <div class="form-group text-center">
+                                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                        </div>
+
+                                                    </form>
+
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div>
+                                {%endif%}
+                            {%endfor%}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

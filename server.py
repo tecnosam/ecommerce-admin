@@ -1,60 +1,109 @@
-from flask import Flask, request, jsonify, session, abort, Response
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify, session, abort, Response, flash, render_template, redirect, url_for
+# from flask_cors import CORS, cross_origin
 
+import buddy
 import api
 
+database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
+
 app = Flask(__name__)
-cors = CORS(app)
+# cors = CORS(app)
 
 app.secret_key = b'681783631680ab73cc5b0b82a96705a4'
 
-app.config['CORS_HEADERS'] = 'Content-Type'
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route("/products", methods = ['POST', 'GET', 'PUT', 'DELETE'])
-@cross_origin()
+prop_map = {
+	'products': {
+		"cols": ['id', 'vid', 'title', 'price', 'image', 'category', 'delivered-in'],
+		"spawnable": True,
+		'deletable': "id", 
+		"editable": ['title', 'price', 'image', 'category', 'delivered-in']
+	},
+	'vendors': {
+		"cols": ['vid', 'name', 'whatsapp'],
+		"spawnable":True,
+		'deletable': "vid",
+		"editable": ["name", "whatsapp"]
+	},
+	'purchases': {
+		"cols": ['ref','id','user', 'price'],
+		"spawnable": False,
+		"deletable": False,
+		"editable": None
+	},
+	'users': {
+		"cols": ['uid', 'name', 'email', 'address'],
+		"spawnable": False,
+		"deletable": False,
+		"editable": None
+	}
+}
+
+@app.route("/")
+def home():
+	return redirect( url_for( "fetch", title = "users" ) )
+
+@app.route("/products", methods = ['POST', 'DELETE'])
 def products():
-	if request.method == 'GET':
-		return jsonify(api.Products.retrieve(  ))
-	elif request.method == 'POST':
+	if request.method == 'POST':
+
 		try:
 			# title, price, image, category, vid, delivered_in=3
-			return jsonify(api.Products.create( **request.form ))
+			res = api.Products.create( **request.form )
+			if res:
+				flash( f"Sucessfully created product", "success" )
+			else:
+				flash( f"Could not create product", "danger" )
 		except TypeError as e:
-			return Response( { 'status': False, 'error': str(e) }, 400 )
-	elif request.method == 'PUT':
-		try:
-			# _id, node, val
-			return jsonify(api.Products.update( **request.form ))
-		except TypeError as e:
-			return Response( { 'status': False, 'error': str(e) }, 400 )
+			abort(400)
+
+
 	elif request.method == 'DELETE':
 		try:
 			# _id
-			return jsonify(api.Products.delete( request.args['_id'] ))
+			return jsonify(api.Products.delete( request.args['id'] ))
 		except TypeError as e:
 			return Response( { 'status': False, 'error': str(e) }, 400 )
 
+	return redirect( url_for( "fetch", title = "products" ) )
 
-	return "The remaining methods are not yet available to the public"
+@app.route("/products-edit", methods = ['POST'])
+def products_edit():
+	try:
+		# _id, node, val
+		data = dict(request.form)
+		_id = data.pop("id")
+		for key in data:
+			api.Products.update( _id = _id, node = key, val = data[key] )
 
+			# if res:
+			# 	flash( f"Sucessfully edited {key} in product {_id}", "success" )
+			# else:
+			# 	flash( f"Could not edit product {_id}", "danger" )
 
-@app.route("/vendors", methods = ['POST', 'GET', 'PUT', 'DELETE'])
-@cross_origin()
+		flash( f"Sucessfully edited product {_id}", "success" )
+
+	except TypeError as e:
+		raise e
+		abort(400)
+
+	return redirect( url_for( "fetch", title = "products" ) )
+
+@app.route("/vendors", methods = ['POST', 'PUT', 'DELETE'])
 def vendors():
-	if request.method == 'GET':
-		return jsonify(api.Vendors.retrieve(  ))
-	elif request.method == 'POST':
+	if request.method == 'POST':
 		try:
 			# vid, name, whatsapp
-			return jsonify(api.Vendors.create( **request.form ))
+			res = api.Vendors.create( **request.form )
+			if res:
+				flash( f"Sucessfully created vendor", "success" )
+			else:
+				flash( f"Could not create vendor", "danger" )
+
 		except TypeError as e:
-			return Response( { 'status': False, 'error': str(e) }, 400 )
-	elif request.method == 'PUT':
-		try:
-			# vid, node, val
-			return jsonify(api.Vendors.update( **request.form ))
-		except TypeError as e:
-			return Response( { 'status': False, 'error': str(e) }, 400 )
+			abort(400)
+
 	elif request.method == 'DELETE':
 		try:
 			# vid
@@ -62,65 +111,41 @@ def vendors():
 		except TypeError as e:
 			return Response( { 'status': False, 'error': str(e) }, 400 )
 
-	return "The remaining methods are not yet available to the public"
+	return redirect( url_for( "fetch", title = "vendors" ) )
 
-
-@app.route( "/login", methods = ['GET', 'POST', 'DELETE'] )
-@cross_origin()
-def login():
-	if request.method == 'GET':
-		if not len( session ):
-			return jsonify(None)
-		return jsonify(dict(session))
-
-	elif request.method == 'DELETE':
-		keys = [i for i in session]
-		for i in keys:
-			session.pop( i )
-		return jsonify( True )
-
+@app.route("/vendors-edit", methods = ['POST'])
+def vendors_edit():
 	try:
-		res = api.Auth.login( **request.get_json() )
-		if res['status']:
-			for key in res['data']:
-				session[key] = res['data'][key]
-		return jsonify( res )
+		# vid, node, val
+		data = dict(request.form)
+		_id = data.pop("vid")
+		for key in data:
+			api.Vendors.update( _id = _id, node = key, val = data[key] )
+
+			# if res:
+			# 	flash( f"Sucessfully edited {key} in product {_id}", "success" )
+			# else:
+			# 	flash( f"Could not edit product {_id}", "danger" )
+
+		flash( f"Sucessfully edited vendor {vid}", "success" )
 
 	except TypeError as e:
-		abort( Response( {"error": str(e), "data": None}, 400 ) )
+		abort(400)
 
-	return "Weird"
+	return redirect( url_for( "fetch", title = "vendors" ) )
 
-@app.route( "/signup", methods = ['POST'] )
-@cross_origin()
-def signup():
-
+@app.route("/fetch/<title>")
+def fetch( title ):
 	try:
-		return jsonify( api.Auth.create( **request.get_json() ) )
-	except TypeError as e:
-		abort( Response( {"status": False,"error": str(e), "data": None}, 400 ) )
+		props = prop_map[title]
+		data = database.fetch( title, props['cols'] )
+	except KeyError as e:
+		print(str(e))
+		flash( "table not found", "danger" )
+		data = []
 
-	return "Weird"
-
-@app.route( "/purchases", methods = ['POST'] )
-def purchases():
-	if request.method == 'POST':
-		data = dict( request.get_json() )
-		ref = data['ref']
-		uid = data['uid']
-		logs = []
-
-		for item in data['basket']:
-			item['quantity'] = 1 if 'quantity' not in item else item['quantity']
-			res = api.Purchases.log( ref, item['id'], uid, item['price'], item['quantity'] )
-			res['product'] = item['title']
-			if not res['status']:
-				logs.append( res )
-
-		return jsonify( { 'status': True, "logs": logs } )
-
-	return "Whoopsy"
-
+	return render_template( "data-renderer.html", data = data,
+			title = title, props = props )
 
 if __name__ == '__main__':
 	app.run( debug = True, host = '0.0.0.0' )

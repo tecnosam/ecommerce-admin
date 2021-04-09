@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>SILCON ADMIN - {%block _title%}{%endblock%}</title>
+    <meta name="author" content="">
+    <link rel="manifest" href="{{url_for('static', filename = 'manifest.json')}}" />
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{url_for('static', filename = 'assets/images/favicon.png')}}">
+    <!-- Custom CSS -->
+    <link href="{{url_for('static', filename = 'assets/extra-libs/c3/c3.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'assets/libs/chartist/dist/chartist.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{{url_for('static', filename = 'dist/css/style.min.css')}}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <script>
+        
+        String.prototype.format = function() {
+            var i = 0, arg = arguements;
+            return this.replace(/{}/g, function() {
+                return typeof args[i] != 'undefined' ? args[i++] : '';
+            });
+        };
+
+    </script>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {%block pheripheral%}
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md">
+                <div class="navbar-header" data-logobg="skin6">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                            class="ti-menu ti-close"></i></a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-brand">
+                        <!-- Logo icon -->
+                        <a href="#">
+                            <!-- <b class="logo-icon"> -->
+                                <!-- Dark Logo icon -->
+                                <!-- <img src="{{url_for('static', filename = 'assets/images/logo-icon.png')}}" alt="homepage" class="dark-logo" /> -->
+                                <!-- Light Logo icon -->
+                                <!-- <img src="{{url_for('static', filename = 'assets/images/logo-icon.png')}}" alt="homepage" class="light-logo" /> -->
+                            <!-- </b> -->
+                            <!--End Logo icon -->
+                            <!-- Logo text -->
+                            <!-- <span class="logo-text"> -->
+                                <!-- dark Logo text -->
+                                <h2 class="mb-0 logo-text text-uppercase">COUPON FACTORY</h2>
+                                <input hidden id="reg_email" value='ikabolo59@gmail.com'>
+                                <!-- <img src="{{url_for('static', filename = 'assets/images/logo-text.png')}}" alt="homepage" class="dark-logo" /> -->
+                                <!-- Light Logo text -->
+                                <!-- <img src="{{url_for('static', filename = 'assets/images/logo-light-text.png')}}" class="light-logo" alt="homepage" /> -->
+                            <!-- </span> -->
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar" data-sidebarbg="skin6">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="list-divider"></li>
+                        <li class="nav-small-cap"><span class="hide-menu">USER FEATURES</span></li>
+                        <!-- View Meetings -->
+                        {%block page_menu%}
+                        <!-- Create container -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{url_for('fetch', title = 'products')}}"
+                                aria-expanded="false">
+                                <i data-feather="sidebar" class="feather-icon"></i>
+                                <span
+                                    class="hide-menu">Products
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{url_for('fetch', title = 'users')}}"
+                                aria-expanded="false">
+                                <i data-feather="sidebar" class="feather-icon"></i>
+                                <span
+                                    class="hide-menu">Users
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{url_for('fetch', title = 'purchases')}}"
+                                aria-expanded="false">
+                                <i data-feather="sidebar" class="feather-icon"></i>
+                                <span
+                                    class="hide-menu">Purchases
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{url_for('fetch', title = 'vendors')}}"
+                                aria-expanded="false">
+                                <i data-feather="sidebar" class="feather-icon"></i>
+                                <span
+                                    class="hide-menu">Vendors
+                                </span>
+                            </a>
+                        </li>
+                        {%endblock%}
+                        <li class="list-divider"></li>
+                        </li>
+
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        {%endblock%}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                {%block content%}
+                {%endblock%}
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <!-- <footer class="footer text-center text-muted">
+                All Rights Reserved by Adminmart. Designed and Developed by Abolo Samuel
+            </footer> -->
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    
+    {%block scripts%}
+    <script src="{{url_for('static', filename = 'assets/libs/jquery/dist/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <!-- apps -->
+    <!-- apps -->
+    <script src="{{url_for('static', filename = 'dist/js/app-style-switcher.js')}}"></script>
+    <script src="{{url_for('static', filename = 'dist/js/feather.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'dist/js/sidebarmenu.js')}}"></script>
+    <!--Custom JavaScript -->
+    <script src="{{url_for('static', filename = 'dist/js/custom.min.js')}}"></script>
+    <!--This page JavaScript -->
+    <script src="{{url_for('static', filename = 'assets/extra-libs/c3/d3.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'assets/extra-libs/c3/c3.min.js')}}"></script>
+    <script src="{{url_for('static', filename = 'dist/js/pages/dashboards/dashboard1.min.js')}}"></script>
+    <!-- <script src="{{url_for('static', filename = 'socket.io.js')}}"></script>
+     -->
+    <!-- <script src="{{url_for('static', filename = 'sw.js')}}"></script> -->
+    <!-- <script src="{{url_for('static', filename = 'socket.io.js')}}"></script>
+    <script src="{{url_for('static', filename = 'socket.js')}}"></script> -->
+    
+    <script src="{{url_for('static', filename = 'new_comer.js')}}"></script>
+    <script>
+      function click(url) {
+        alert(url)
+        /*$.ajax({
+          url: "/bookmark/"+ url,
+          success: function(data){
+            $(this).css("color", "purple")
+          }
+        })*/
+        
+      }
+    </script>
+    {%endblock%}
+</body>
+
+</html>

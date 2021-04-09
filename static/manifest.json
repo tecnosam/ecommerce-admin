@@ -1,0 +1,16 @@
+{
+    "name": "Tweedler",
+    "short_name": "tweedler",
+    "theme_color": "#0000ff",
+    "background_color": "#000000",
+    "display": "standalone",
+    "start_url": "/",
+    "description": "A group meeting/chatting app",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "assets/images/big/auth-bg.jpg",
+            "sizes": "2000x2000"
+        }
+    ]
+}

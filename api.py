@@ -1,6 +1,9 @@
 from db.mysql import Connection as con
 
 from hashlib import md5
+import buddy
+
+database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
 
 class Auth:
 
@@ -10,11 +13,10 @@ class Auth:
 		cols = 'uid,name,email,pwd,address'
 
 		sql = f"SELECT {cols} FROM users WHERE email='{email}' AND pwd='{_pwd}'"
-		db = con()
+		db = database.db
 		cols = cols.split(",")
 
 		res = db.getone( sql )
-		print(res)
 		if res is None:
 			return {
 				"status": False,
@@ -34,7 +36,7 @@ class Auth:
 
 		sql = f"""INSERT INTO users (uid, name, email, pwd, address)
 			 VALUES ('{uid}', '{name}', '{email}', '{pwd}', '{address}')"""
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -48,7 +50,7 @@ class Auth:
 			val = md5( pwd.encode() ).hexdigest()
 
 		sql = f"UPDATE users SET `{node}`='{val}' WHERE id={_id}"
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -62,7 +64,7 @@ class Products:
 					VALUES ('%s', %s, '%s', '%s', '%s', %s)""" % (
 				title, price, image, category, vid, delivered_in
 			)
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -70,7 +72,7 @@ class Products:
 	def retrieve( fil = None ):
 		cols = ['id', 'title', 'price', 'image', 'category', '`delivered-in`']
 		sql = f"SELECT {','.join(cols)} FROM products ORDER BY `date-posted` DESC"
-		db = con()
+		db = database.db
 
 		res = db.get(sql)
 		ret = []
@@ -87,18 +89,15 @@ class Products:
 		if node not in [ 'title', 'price', 'category', 'delivered-in' ]:
 			return {'status': False, 'code': 405}
 
-		if node == 'delivered-in':
-			node = '`delivered-in`'
-
 		sql = f"UPDATE products SET `{node}`='{val}' WHERE id={_id}"
-		db = con()
+		db = database.db
 
-		return {'status': db.set( sql )}
+		return db.set( sql )
 
 	@staticmethod
 	def delete( _id ):
 		sql = f"DELETE FROM products WHERE id={_id}"
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -106,13 +105,12 @@ class Products:
 class Vendors:
 
 	@staticmethod
-	def create( vid, name, whatsapp ):
-		# Vid means vendor ID
-		sql = "INSERT INTO vendors ( vid, name, whatsapp ) VALUES ('%s', '%s', '%s')" % (
-				vid, name, whatsapp
+	def create( name, whatsapp ):
+		sql = "INSERT INTO vendors ( name, whatsapp ) VALUES ('%s', '%s')" % (
+				name, whatsapp
 			)
 
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -120,7 +118,7 @@ class Vendors:
 	def retrieve( fil = None ):
 		cols = ['vid', 'name', 'whatsapp']
 		sql = "SELECT vid,name,whatsapp FROM vendors ORDER BY `date-created` DESC"
-		db = con()
+		db = database.db
 
 		res = db.get(sql)
 		ret = []
@@ -138,14 +136,14 @@ class Vendors:
 			return {'status': False, 'code': 405}
 
 		sql = f"UPDATE vendors SET `{node}`='{val}' WHERE vid={vid}"
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
 	@staticmethod
 	def delete( vid ):
 		sql = f"DELETE FROM vendors WHERE vid={vid}"
-		db = con()
+		db = database.db
 
 		return {'status': db.set( sql )}
 
@@ -161,7 +159,7 @@ class Purchases:
 				ref, _id, user, price, quantity
 			)
 		if db is None:
-			db = con()
+			db = database.db
 
 		return {
 			'status': db.set( sql )
