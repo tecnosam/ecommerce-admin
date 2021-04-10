@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify, session, abort, Response, flash, render_template, redirect, url_for
 # from flask_cors import CORS, cross_origin
+from werkzeug.utils import secure_filename
 
 import buddy
 import api
+import os
 
-database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
+# database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
 
 app = Flask(__name__)
 # cors = CORS(app)
@@ -17,14 +19,21 @@ prop_map = {
 	'products': {
 		"cols": ['id', 'vid', 'title', 'price', 'image', 'category', 'delivered-in'],
 		"spawnable": True,
-		'deletable': "id", 
-		"editable": ['title', 'price', 'image', 'category', 'delivered-in']
+		'deletable': "id",
+		"editable": {
+			'title':'text', 
+			'price':'number', 
+			'image': 'file', 
+			'category':'text',
+			'vid': "number",
+			'delivered-in':'number'
+		}
 	},
 	'vendors': {
 		"cols": ['vid', 'name', 'whatsapp'],
 		"spawnable":True,
 		'deletable': "vid",
-		"editable": ["name", "whatsapp"]
+		"editable": {"name": "text", "whatsapp": "text"}
 	},
 	'purchases': {
 		"cols": ['ref','id','user', 'price'],
@@ -50,12 +59,23 @@ def products():
 
 		try:
 			# title, price, image, category, vid, delivered_in=3
-			res = api.Products.create( **request.form )
+			data = dict(request.form)
+			fn = secure_filename( request.files['image'].filename )
+
+			request.files['image'].save( fn )
+
+			data['image'] = api.upload( fn )
+			data['delivered_in'] = data.pop('delivered-in')
+			os.remove(fn)
+
+			res = api.Products.create( **data )
+
 			if res:
 				flash( f"Sucessfully created product", "success" )
 			else:
 				flash( f"Could not create product", "danger" )
 		except TypeError as e:
+			raise e
 			abort(400)
 
 
@@ -75,6 +95,14 @@ def products_edit():
 		data = dict(request.form)
 		_id = data.pop("id")
 		for key in data:
+			if key == 'image':
+				fn = secure_filename( request.files['image'].filename )
+
+				request.files['image'].save( fn )
+
+				data[key] = api.upload( fn )
+
+				os.remove( fn )
 			api.Products.update( _id = _id, node = key, val = data[key] )
 
 			# if res:
@@ -138,7 +166,7 @@ def vendors_edit():
 def fetch( title ):
 	try:
 		props = prop_map[title]
-		data = database.fetch( title, props['cols'] )
+		data = api.database.fetch( title, props['cols'] )[::-1]
 	except KeyError as e:
 		print(str(e))
 		flash( "table not found", "danger" )

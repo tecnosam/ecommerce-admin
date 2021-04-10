@@ -10,10 +10,11 @@
             if (confirm( `Are you sure you want to delete row with ${deletable} ${key}` )) {
                 console.log("Deleting");
                 $.ajax({
-                    url: `/${title}?${key}`,
+                    url: `/{{title}}?${deletable}=${key}`,
                     method: 'DELETE',
                     success: function( status ) {
-                        if ( status ) {
+                        console.log(status)
+                        if ( status.status ) {
                             alert(`Successfully deleted row with ${deletable} ${key}`);
                             $(`#${key}`).remove();
                         } else { alert("Could not delete row") }
@@ -39,14 +40,14 @@
                             <div class="text-center mt-2 mb-4">
                                 <h2 class="text-uppercase">fill {{title}} info</h2>
                             </div>
-                            <form class="pl-3 pr-3"
+                            <form class="pl-3 pr-3" enctype="multipart/form-data" 
                              method="POST" action="{{ url_for(title) }}">
 
                                 {%for key in props.editable%}
                                     <div class="form-group">
                                         <label for="{{key}}">{{key}}</label>
                                         <input class="form-control" placeholder="{{key}}..." 
-                                         type="text" name="{{key}}" required="">
+                                         type="{{props.editable[key]}}" name="{{key}}" required="">
                                     </div>
                                     <br>
                                 {%endfor%}
@@ -96,7 +97,7 @@
                             
                             {% for row in data %}
                                 <tr 
-                                id="`{%if props.deletable != False%}{{props.deletable}}{%endif%}`">
+                                id="{%if props.deletable != False%}{{row[props.deletable]}}{%endif%}">
                                     {%for key in row%}
                                         <td> {{row[key]}} </td>
                                     {%endfor%}
@@ -127,13 +128,13 @@
                                                     <div class="text-center mt-2 mb-4">
                                                         <h2 class="text-uppercase">FILL INFO</h2>
                                                     </div>
-                                                    <form class="pl-3 pr-3"
+                                                    <form class="pl-3 pr-3" enctype="multipart/form-data" 
                                                      method="POST" action="/{{ title }}-edit">
 
                                                         {%for key in props.editable%}
                                                             <div class="form-group">
                                                                 <label for="{{key}}">{{key}}</label>
-                                                                <input class="form-control" type="text" name="{{key}}" required=""
+                                                                <input class="form-control" type="{{props.editable[key]}}" name="{{key}}" required=""
                                                                     value="{{row[key]}}">
                                                             </div>
                                                             <br>

@@ -1,0 +1,106 @@
+[
+	{
+		"title": "Shirt and Shorts set. Size: small",
+		"price": 12500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012102/silcon/sassoflagos/IMG-20210409-WA0062_zm48qw.jpg",
+		"category": "clothes;unisex;small",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Shirt and Shorts set. Size: XL",
+		"price": 12500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012102/silcon/sassoflagos/IMG-20210409-WA0062_zm48qw.jpg",
+		"category": "clothes;unisex",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Dyed Shirt. size: small (blue)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012051/silcon/sassoflagos/IMG-20210410-WA0024_yny84q.jpg",
+		"category": "clothes;unisex;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Dyed Shirt. size: XL (blue)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012051/silcon/sassoflagos/IMG-20210410-WA0024_yny84q.jpg",
+		"category": "clothes;unisex;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Dyed Shirt. size: small (black)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012051/silcon/sassoflagos/IMG-20210410-WA0027_wgibbt.jpg",
+		"category": "clothes;unisex;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Dyed Shirt. size: XL (black)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012051/silcon/sassoflagos/IMG-20210410-WA0027_wgibbt.jpg",
+		"category": "clothes;unisex;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Cropped middle zip hoodie small (yellow)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012100/silcon/sassoflagos/IMG-20210409-WA0064_wmv2wx.jpg",
+		"category": "clothes;female-clothes;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Cropped middle zip hoodie large (yellow)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012100/silcon/sassoflagos/IMG-20210409-WA0064_wmv2wx.jpg",
+		"category": "clothes;female-clothes;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Cropped middle zip hoodie small (grey)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012101/silcon/sassoflagos/IMG-20210409-WA0063_qv8myf.jpg",
+		"category": "clothes;female-clothes;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Cropped middle zip hoodie large (grey)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012101/silcon/sassoflagos/IMG-20210409-WA0063_qv8myf.jpg",
+		"category": "clothes;female-clothes;shipped;gray",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Cropped middle zip hoodie large (grey)",
+		"price": 8500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012101/silcon/sassoflagos/IMG-20210409-WA0063_qv8myf.jpg",
+		"category": "clothes;female-clothes;shipped;gray",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Ice necklace",
+		"price": 11500,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012098/silcon/sassoflagos/IMG-20210409-WA0073_hoky1y.jpg",
+		"category": "accessories;necklaces;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	},
+	{
+		"title": "Gold choker",
+		"price": 9000,
+		"image": "https://res.cloudinary.com/tecnosam/image/upload/v1618012097/silcon/sassoflagos/IMG-20210409-WA0074_krnc9d.jpg",
+		"category": "accessories;chokers;necklaces;shipped",
+		"vid": 2,
+		"delivered-in": 7
+	}
+]

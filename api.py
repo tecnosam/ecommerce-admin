@@ -1,9 +1,22 @@
 from db.mysql import Connection as con
 
-from hashlib import md5
+from hashlib import md5, sha1
+import time
+from requests import post
 import buddy
 
 database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
+
+def upload(fn):
+	url = "https://api.cloudinary.com/v1_1/tecnosam/image/upload"
+	timestamp = int(time.time())
+	signature = sha1(f"timestamp={timestamp}UNe-2W-y7BTECHqyetINaBO2btw".encode()).hexdigest()
+	file = open(fn, "rb")
+	api_key = "758317386493753"
+	data = {"api_key": api_key, "timestamp": timestamp, "signature": signature }
+	files = {"file": file}
+	res = post( url, data = data, files = files )
+	return res.json()['secure_url']
 
 class Auth:
 
