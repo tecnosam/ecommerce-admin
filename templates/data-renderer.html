@@ -51,6 +51,11 @@
                                     </div>
                                     <br>
                                 {%endfor%}
+                                {%if props.vid != None%}
+                                    <input type="number" name="vid" value="{{props.vid}}"
+                                        hidden="" required="">
+                                {%endif%}
+
 
                                 <div class="form-group text-center">
                                     <button class="btn btn-primary" type="submit">Create</button>
@@ -134,7 +139,7 @@
                                                         {%for key in props.editable%}
                                                             <div class="form-group">
                                                                 <label for="{{key}}">{{key}}</label>
-                                                                <input class="form-control" type="{{props.editable[key]}}" name="{{key}}" required=""
+                                                                <input class="form-control" type="{{props.editable[key]}}" name="{{key}}"
                                                                     value="{{row[key]}}">
                                                             </div>
                                                             <br>

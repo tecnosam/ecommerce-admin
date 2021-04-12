@@ -114,46 +114,48 @@
                         <li class="nav-small-cap"><span class="hide-menu">USER FEATURES</span></li>
                         <!-- View Meetings -->
                         {%block page_menu%}
-                        <!-- Create container -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{url_for('fetch', title = 'products')}}"
-                                aria-expanded="false">
-                                <i data-feather="sidebar" class="feather-icon"></i>
-                                <span
-                                    class="hide-menu">Products
-                                </span>
-                            </a>
-                        </li>
+                        {%if props.vid == None%}
+                            <!-- Create container -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{url_for('fetch', title = 'products')}}?key=0000"
+                                    aria-expanded="false">
+                                    <i data-feather="sidebar" class="feather-icon"></i>
+                                    <span
+                                        class="hide-menu">Products
+                                    </span>
+                                </a>
+                            </li>
 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{url_for('fetch', title = 'users')}}"
-                                aria-expanded="false">
-                                <i data-feather="sidebar" class="feather-icon"></i>
-                                <span
-                                    class="hide-menu">Users
-                                </span>
-                            </a>
-                        </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{url_for('fetch', title = 'users')}}"
+                                    aria-expanded="false">
+                                    <i data-feather="sidebar" class="feather-icon"></i>
+                                    <span
+                                        class="hide-menu">Users
+                                    </span>
+                                </a>
+                            </li>
 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{url_for('fetch', title = 'purchases')}}"
-                                aria-expanded="false">
-                                <i data-feather="sidebar" class="feather-icon"></i>
-                                <span
-                                    class="hide-menu">Purchases
-                                </span>
-                            </a>
-                        </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{url_for('fetch', title = 'purchases')}}"
+                                    aria-expanded="false">
+                                    <i data-feather="sidebar" class="feather-icon"></i>
+                                    <span
+                                        class="hide-menu">Purchases
+                                    </span>
+                                </a>
+                            </li>
 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{url_for('fetch', title = 'vendors')}}"
-                                aria-expanded="false">
-                                <i data-feather="sidebar" class="feather-icon"></i>
-                                <span
-                                    class="hide-menu">Vendors
-                                </span>
-                            </a>
-                        </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{url_for('fetch', title = 'vendors')}}"
+                                    aria-expanded="false">
+                                    <i data-feather="sidebar" class="feather-icon"></i>
+                                    <span
+                                        class="hide-menu">Vendors
+                                    </span>
+                                </a>
+                            </li>
+                        {%endif%}
                         {%endblock%}
                         <li class="list-divider"></li>
                         </li>

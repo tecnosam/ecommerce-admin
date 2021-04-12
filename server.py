@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, session, abort, Response, flash, render_template, redirect, url_for
 # from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
-
+import copy
 import buddy
 import api
 import os
@@ -10,6 +10,7 @@ import os
 
 app = Flask(__name__)
 # cors = CORS(app)
+ADMIN = '0000'
 
 app.secret_key = b'681783631680ab73cc5b0b82a96705a4'
 
@@ -27,25 +28,29 @@ prop_map = {
 			'category':'text',
 			'vid': "number",
 			'delivered-in':'number'
-		}
+		},
+		"vid": None
 	},
 	'vendors': {
 		"cols": ['vid', 'name', 'whatsapp'],
 		"spawnable":True,
 		'deletable': "vid",
-		"editable": {"name": "text", "whatsapp": "text"}
+		"editable": {"name": "text", "whatsapp": "text"},
+		"vid": None
 	},
 	'purchases': {
 		"cols": ['ref','id','user', 'price'],
 		"spawnable": False,
 		"deletable": False,
-		"editable": None
+		"editable": None,
+		"vid": None
 	},
 	'users': {
 		"cols": ['uid', 'name', 'email', 'address'],
 		"spawnable": False,
 		"deletable": False,
-		"editable": None
+		"editable": None,
+		"vid": None
 	}
 }
 
@@ -55,6 +60,11 @@ def home():
 
 @app.route("/products", methods = ['POST', 'DELETE'])
 def products():
+	try:
+		vid = request.args['key']
+	except KeyError:
+		abort(Response("Access denied. invalid key. key should be your vid", 400))
+
 	if request.method == 'POST':
 
 		try:
@@ -86,10 +96,16 @@ def products():
 		except TypeError as e:
 			return Response( { 'status': False, 'error': str(e) }, 400 )
 
-	return redirect( url_for( "fetch", title = "products" ) )
+	return redirect( url_for( "fetch", title = "products" ) + f"?key={vid}" )
 
 @app.route("/products-edit", methods = ['POST'])
 def products_edit():
+
+	try:
+		vid = request.args['key']
+	except KeyError:
+		abort(Response("Access denied. invalid key. key should be your vid", 400))
+
 	try:
 		# _id, node, val
 		data = dict(request.form)
@@ -116,10 +132,11 @@ def products_edit():
 		raise e
 		abort(400)
 
-	return redirect( url_for( "fetch", title = "products" ) )
+	return redirect( url_for( "fetch", title = "products" ) + f"?key={vid}" )
 
 @app.route("/vendors", methods = ['POST', 'PUT', 'DELETE'])
 def vendors():
+
 	if request.method == 'POST':
 		try:
 			# vid, name, whatsapp
@@ -165,9 +182,26 @@ def vendors_edit():
 @app.route("/fetch/<title>")
 def fetch( title ):
 	try:
-		props = prop_map[title]
-		data = api.database.fetch( title, props['cols'] )[::-1]
+		vid = request.args['key']
+	except KeyError:
+		if title != 'products':
+			vid = ADMIN
+		else:
+			abort(Response("Access denied. invalid key. key should be your vid", 400))
+	try:
+		print( prop_map[title] )
+		props = copy.deepcopy(prop_map[title])
+		if (vid == ADMIN):
+			data = api.database.fetch( title, props['cols'] )[::-1]
+		else:
+			if (title == 'products'):
+				props['vid'] = vid
+				props['editable'].pop('vid')
+				data = api.database.fetch( title, props['cols'], {'vid': vid} )[::-1]
+			else:
+				data = []
 	except KeyError as e:
+		raise e
 		print(str(e))
 		flash( "table not found", "danger" )
 		data = []
