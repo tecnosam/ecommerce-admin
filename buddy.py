@@ -13,7 +13,7 @@ def join( joiner, seq ):
 def extract_con_str(con_string):
 	# connection string format mysql://usename:pasword@host:port/database
 	params = re.sub('(mysql://|:|@|/)', '\t', con_string).strip().split("\t")
-	print(params)
+	# print(params)
 	return params
 
 def seq_format(seq, joiner:str, sep = "=", pad = False, padder = "'"):

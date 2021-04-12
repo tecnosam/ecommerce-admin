@@ -56,7 +56,12 @@ prop_map = {
 
 @app.route("/")
 def home():
-	return redirect( url_for( "fetch", title = "users" ) )
+	try:
+		vid = request.args['key']
+	except KeyError:
+		abort(Response("Access denied. invalid key. key should be your vid", 400))
+
+	return redirect( url_for( "fetch", title = "products", key = vid ) )
 
 @app.route("/products", methods = ['POST', 'DELETE'])
 def products():
@@ -189,7 +194,7 @@ def fetch( title ):
 		else:
 			abort(Response("Access denied. invalid key. key should be your vid", 400))
 	try:
-		print( prop_map[title] )
+		# print( prop_map[title] )
 		props = copy.deepcopy(prop_map[title])
 		if (vid == ADMIN):
 			data = api.database.fetch( title, props['cols'] )[::-1]
