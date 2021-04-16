@@ -4,6 +4,7 @@ from hashlib import md5, sha1
 import time
 from requests import post
 import buddy
+import os
 
 database = buddy.Instance(os.environ.get('database_string'))
 
