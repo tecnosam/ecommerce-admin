@@ -5,7 +5,7 @@ import time
 from requests import post
 import buddy
 
-database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
+database = buddy.Instance(os.environ.get('database_string'))
 
 def upload(fn):
 	url = "https://api.cloudinary.com/v1_1/tecnosam/image/upload"

@@ -6,13 +6,11 @@ import buddy
 import api
 import os
 
-# database = buddy.Instance("mysql://n0r8dtq32n99jcwm:snapxx84ci4o4824@vkh7buea61avxg07.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ftakoaax9gh5voz8")
-
 app = Flask(__name__)
 # cors = CORS(app)
-ADMIN = '0000'
+ADMIN = os.environ.get('admin_key')
 
-app.secret_key = b'681783631680ab73cc5b0b82a96705a4'
+app.secret_key = os.environ.get('secret_key')
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
