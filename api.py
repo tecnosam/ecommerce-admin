@@ -6,7 +6,7 @@ from requests import post
 import buddy
 import os
 
-database = buddy.Instance(os.environ.get('database_string'))
+database = buddy.Instance(os.environ.get('DATABASE_STRING'))
 
 def upload(fn):
 	url = "https://api.cloudinary.com/v1_1/tecnosam/image/upload"

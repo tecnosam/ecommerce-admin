@@ -8,9 +8,9 @@ import os
 
 app = Flask(__name__)
 # cors = CORS(app)
-ADMIN = os.environ.get('admin_key')
+ADMIN = os.environ.get('ADMIN_KEY')
 
-app.secret_key = os.environ.get('secret_key')
+app.secret_key = os.environ.get('SECRET_KEY')
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
