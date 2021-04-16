@@ -210,7 +210,7 @@ def fetch( title ):
 		data = []
 
 	return render_template( "data-renderer.html", data = data,
-			title = title, props = props )
+			title = title, props = props, nav = [i for i in prop_map] )
 
 if __name__ == '__main__':
 	app.run( debug = True, host = '0.0.0.0' )
